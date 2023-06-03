@@ -69,6 +69,7 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Image</th>
+                                            <th>Winner Name</th>
                                             <th>End Date</th>
                                             <th>Start date</th>
                                             <th>Status</th>
@@ -82,6 +83,7 @@
                                             <th>Title</th>
                                             <th>Description</th>
                                             <th>Image</th>
+                                            <th>Winner Name</th>
                                             <th>End Date</th>
                                             <th>Start date</th>
                                             <th>Status</th>
@@ -97,12 +99,27 @@
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
+                                        
+                                        $winnerId = $row['winner_id'];
+                                        if($winnerId > 0){
+                                            $winnerSql = "SELECT username FROM users WHERE id = '$winnerId'";
+                                            $winnerQuery = $conn -> query($winnerSql);
+                                            $winnerResult = $winnerQuery -> fetch_assoc();    
+                                            $winnerName = $winnerResult['username'];
+                                        }
+                                        else {
+                                            $winnerName =  "No one";
+                                        }
+                                        
+
                                         ?>
                                         <tr>
                                             <td><?php echo $row['id']; ?></td>
                                             <td><?php echo $row['title']; ?></td>
                                             <td><?php echo $row['description']; ?></td>
                                             <td><img src="../<?php echo $row['image']; ?>" width="100" height="100">
+                                            </td>
+                                            <td> <?php echo $winnerName?>
                                             </td>
                                             <td><?php echo $row['end_time']; ?></td>
                                             <td><?php echo $row['start_time']; ?></td>

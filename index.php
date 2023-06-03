@@ -2,7 +2,10 @@
 require_once 'top.php';
 
 
-?>
+
+
+
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,19 +17,26 @@ require_once 'top.php';
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <style>
-.card-text {
-    display: inline-block;
-}
+    html{
+        min-height: 100vh;
+    }
+    body {
+        min-height: 100vh;
+    }
 
-.place-bid-btn {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: middle;
-}
+    .card-text {
+        display: inline-block;
+    }
+
+    .place-bid-btn {
+        display: inline-block;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
 </style>
 
 <body>
-    <div class="container">
+    <div class="container d-flex flex-column min-vh-100">
         <h1 class="text-center mt-4 mb-5">Auction List</h1>
         <div class="row">
             <?php

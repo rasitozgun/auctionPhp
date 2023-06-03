@@ -24,7 +24,7 @@ $username = $_SESSION['admin_username'];
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">BidAdmin <sup>3</sup></div>
+        <div class="sidebar-brand-text mx-3">BidAdmin2 <sup>3</sup></div>
     </a>
 
     <!-- Divider -->
@@ -62,6 +62,11 @@ $username = $_SESSION['admin_username'];
         <a class="nav-link" href="auctions.php">
             <i class="fas fa-fw fa-table"></i>
             <span>Auctions</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="user_management.php">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Users</span></a>
     </li>
 
     <!-- Divider -->

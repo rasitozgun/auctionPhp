@@ -1,8 +1,8 @@
 <?php
 
 // Implement a system for users to delete their own auctions
-session_start();
 require_once 'db.php';
+require_once 'top.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -27,8 +27,13 @@ if (mysqli_num_rows($result) != 1) {
     exit();
 }
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Delete auction
+    $deleteBidsQuery = "DELETE FROM bids WHERE auction_id = '$auction_id'";
+    mysqli_query($conn, $deleteBidsQuery);
+
     $query = "DELETE FROM auctions WHERE id = '$auction_id'";
     mysqli_query($conn, $query);
 
@@ -38,13 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<h1>Delete Auction</h1>
+<div class="container mt-5">
+    <h1>Delete Auction</h1>
 
-<p>Are you sure you want to delete this auction?</p>
-
-<form method="post">
-    <div>
-        <button type="submit">Yes</button>
-        <a href="manage_auctions.php">No</a>
+    <div class="alert alert-danger mt-4">
+        <p>Are you sure you want to delete this auction?</p>
     </div>
-</form>
+
+    <form method="POST" class="mt-4">
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-danger">Yes</button>
+            <a href="manage_auctions.php" class="btn btn-secondary">No</a>
+        </div>
+    </form>
+</div>

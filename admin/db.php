@@ -1,9 +1,9 @@
 <?php 
 
 $host = "localhost";
-$password = "";
+$password = "1649";
 $dbname ="auctiondb";
-$username = "root";
+$username = "rasit";
 
 $conn = mysqli_connect($host,$username,$password,$dbname,3306);
 

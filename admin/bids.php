@@ -31,7 +31,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include 'sidebar.php'?>
+        <?php require 'sidebar.php'?>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -42,7 +42,7 @@
                 <!-- Topbar -->
                 <?php 
 
-                include 'navbar.php';
+                require 'navbar.php';
                 ?>
 
                 <!-- Begin Page Content -->
@@ -61,8 +61,8 @@
                                     <thead>
                                         <tr>
                                             <th>Amount</th>
-                                            <th>Bidder ID</th>
-                                            <th>Auction ID</th>
+                                            <th>Bidder Name</th>
+                                            <th>Auction Name</th>
                                             <th>Bid Time</th>
                                             <th>Status</th>
                                             <th>Delete</th>
@@ -86,10 +86,17 @@
 
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
+
+                                    $bidderId = $row['bidder_id'];
+                                    $bidderSql = "SELECT username FROM users WHERE id = '$bidderId'";
+                                    $bidderResult = $conn -> query($bidderSql);
+                                    $bidderArray = $bidderResult -> fetch_assoc();
+                                    $bidder = $bidderArray['username'];
+
                                     ?>
                                         <tr>
                                             <td><?php echo $row['amount']; ?></td>
-                                            <td><?php echo $row['bidder_id']; ?></td>
+                                            <td><?php echo $bidder; ?></td>
                                             <td><?php echo $row['auction_id']; ?></td>
                                             <td><?php echo $row['bid_time']; ?></td>
                                             <td><?php echo ($row['status'] == 1 ? 'Active' : 'Inactive'); ?></td>

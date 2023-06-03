@@ -1,6 +1,6 @@
 <?php
 require_once 'top.php';
-
+ob_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $description = $_POST['description'];
@@ -12,22 +12,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'All fields are required';
     }
 
+    if ($end_time < date("Y-m-d H:i:s")){
+        $error = "End time can not be earlier than now";    
+    }
+
+
     if (!is_numeric($starting_price) || !is_numeric($reserve_price)) {
         $error = 'Starting price and reserve price must be numbers';
     }
 
     // Image upload
-    $image = $_FILES['image'];
-    $image_name = $image['name'];
-    $image_tmp = $image['tmp_name'];
-    $image_path = 'assets/' . $image_name;
-    move_uploaded_file($image_tmp, $image_path);
+    try {
+        //code...
+        $image = $_FILES['image'];
+        $image_name = rand(11111,99999)."_".$image['name'];
+        $image_tmp = $image['tmp_name'];
+        $image_path = 'assets/' . $image_name;
+        move_uploaded_file($image_tmp, $image_path);
+    } catch (\Throwable $th) {
+        //throw $th;
+        printf($th);
+        $error = $th;
+    }
+
 
     // Store auction details in the database
+
+
     if (!isset($error)) {
-        $query = "INSERT INTO auctions (title, description, image, start_price, end_time,  reserve_price,  seller_id) VALUES ('$title', '$description', '$image_path', '$starting_price', '$end_time', '$reserve_price', '$user_id')";
-        mysqli_query($conn, $query);
-        header('Location: dashboard.php');
+
+        try {
+            //code...
+            $query = "INSERT INTO auctions (title, description, image, start_price, end_time, reserve_price, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($conn, $query);
+            mysqli_stmt_bind_param($stmt, 'sssssss', $title, $description, $image_path, $starting_price, $end_time, $reserve_price, $user_id);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            $success_message = 'Auction created successfully';
+        } catch (\Throwable $th) {
+            //throw $th;
+            printf($th);
+        }
+
+     
     }
 }
 ?>
@@ -101,9 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <h3>Create Auction</h3>
         <?php if (isset($error)) { echo '<div class="alert alert-danger">'.$error.'</div>'; } ?>
+        <?php if (isset($success_message)) { echo '<div class="alert alert-success">'.$success_message.'</div>'; } ?>
         <div class="row">
             <div class="col-md-6">
-                <form method="post" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Title:</label>
                         <input type="text" class="form-control" name="title" required>
@@ -128,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <label>Image:</label>
-                    <input type="file" class="form-control-file" name="image" accept="image/*" required>
+                    <input type="file" class="form-control-file" accept="image/*" name="image" required>
                 </div>
                 <div class="text-center">
                     <input type="submit" class="btn btn-primary" value="Create Auction">

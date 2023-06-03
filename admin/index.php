@@ -26,7 +26,8 @@ $totalUsers = $row['total_users'];
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>BidAdmin</title>
+
+    <title>Bids Admin</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -34,9 +35,11 @@ $totalUsers = $row['total_users'];
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -45,7 +48,7 @@ $totalUsers = $row['total_users'];
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php include 'sidebar.php' ?>
+        <?php require_once 'sidebar.php' ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -56,7 +59,7 @@ $totalUsers = $row['total_users'];
 
                 <!-- Topbar -->
                 <?php
-                include 'navbar.php'; 
+                require_once 'navbar.php'; 
                 ?>
                 <!-- End of Topbar -->
 
@@ -70,7 +73,7 @@ $totalUsers = $row['total_users'];
 
                     <!-- Content Row -->
                     <div class="row">
-                        <?php 
+                    <?php 
                         
                         $sql = "SELECT COUNT(*) AS auctionCount FROM auctions";
                         $result = $conn->query($sql);
@@ -144,11 +147,11 @@ $totalUsers = $row['total_users'];
                     <!-- Content Row -->
 
                     <div class="row">
-
                         <!-- Area Chart -->
                         <?php 
-                        
-                        $sql = "SELECT a.title, b.amount
+                        try {
+                            //code...
+                            $sql = "SELECT a.title, b.amount
                         FROM auctions a
                         INNER JOIN bids b ON a.id = b.auction_id
                         WHERE b.status = 1
@@ -161,8 +164,15 @@ $totalUsers = $row['total_users'];
                         while ($row = $result->fetch_assoc()) {
                             $data[] = $row;
                         }
-                                        
+                              
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                            print_r($th);
+                        }
+                              
+                                  
                         ?>
+                    
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
@@ -185,7 +195,7 @@ $totalUsers = $row['total_users'];
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Auction Chart</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -194,14 +204,14 @@ $totalUsers = $row['total_users'];
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <!-- Verileri döngüyle yazdırma -->
-                                        <?php
-                $sql = "SELECT u.username, COUNT(*) as total_auctions
-                        FROM auctions a
-                        INNER JOIN users u ON a.seller_id = u.id
-                        GROUP BY u.id";
-                $result = $conn->query($sql);
-                
-                ?>
+                                                                <?php
+                                        $sql = "SELECT u.username, COUNT(*) as total_auctions
+                                                FROM auctions a
+                                                INNER JOIN users u ON a.seller_id = u.id
+                                                GROUP BY u.id";
+                                        $result = $conn->query($sql);
+                                        
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -264,6 +274,7 @@ $totalUsers = $row['total_users'];
     </div>
 
     <!-- Bootstrap core JavaScript-->
+
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -339,9 +350,6 @@ $totalUsers = $row['total_users'];
     Chart.defaults.global.defaultFontColor = '#858796';
 
     function number_format(number, decimals, dec_point, thousands_sep) {
-        // ...
-        // number_format fonksiyonunun kodu buraya gelecek
-        // ...
         number = (number + '').replace(',', '').replace(' ', '');
         var n = !isFinite(+number) ? 0 : +number,
             prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
@@ -405,6 +413,7 @@ $totalUsers = $row['total_users'];
         }
     });
     </script>
+
 
 </body>
 

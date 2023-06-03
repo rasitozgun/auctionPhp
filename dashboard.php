@@ -8,7 +8,7 @@ $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 
-// Get active bids
+// Get active bids  
 $bid_query = "SELECT a.id AS auction_id, a.title, b.amount, a.end_time
 FROM auctions AS a
 JOIN bids AS b ON a.id = b.auction_id
@@ -87,6 +87,7 @@ $won_result = mysqli_query($conn, $won_query);
 
 
         <form action="update_account.php" method="post">
+           
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" class="w-50 form-control" name="username" value="<?php echo $user['username']; ?>">
